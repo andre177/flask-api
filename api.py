@@ -6,8 +6,8 @@ app = Flask(__name__)
 def ping():
     return jsonify({'response': 'pong'})
 
-@app.route('/lala', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def ping():
-    return jsonify({'response': 'lele'})
+    return jsonify({'status': 'ok'})
 
 app.run(host='0.0.0.0', port=5000)
