@@ -7,7 +7,7 @@ def ping():
     return jsonify({'response': 'pong'})
 
 @app.route('/health', methods=['GET'])
-def ping():
+def healthcheck():
     return jsonify({'status': 'ok'})
 
 app.run(host='0.0.0.0', port=5000)
