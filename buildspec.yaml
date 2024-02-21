@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - $(aws ecr get-login --no-include-email --region us-east-1)
+  build:
+    commands:
+      - docker build -t flask-api:latest .
+      - docker tag flask-api:latest 405882367324.dkr.ecr.us-east-1.amazonaws.com/flask-api:latest
+  post_build:
+    commands:
+      - docker push 405882367324.dkr.ecr.us-east-1.amazonaws.com/flask-api:latest
+      - printf '[{"name":"flask-api","imageUri":"%s"}]' 405882367324.dkr.ecr.us-east-1.amazonaws.com/flask-api:latest > imagedefinitions.json
+      - aws deploy create-deployment \
+          --application-name flask-api \
+          --deployment-group-name flask-api \
+          --revision '{"revisionType":"AppSpecContent","appSpecContent":{"version":"0.0.1"}}'
+artifacts:
+  files: imagedefinitions.json
